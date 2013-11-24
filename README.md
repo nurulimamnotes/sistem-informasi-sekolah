@@ -1,4 +1,4 @@
-sistem-informasi-sekolah
+Sistem Informasi Sekolah
 ========================
 
 Sistem Informasi Sekolah JIBAS
