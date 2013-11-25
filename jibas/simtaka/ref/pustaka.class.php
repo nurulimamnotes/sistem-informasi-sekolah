@@ -1,0 +1,99 @@
+<?
+/**[N]**
+ * JIBAS Education Community
+ * Jaringan Informasi Bersama Antar Sekolah
+ * 
+ * @version: 3.2 (September 03, 2013)
+ * @notes: JIBAS Education Community will be managed by Yayasan Indonesia Membaca (http://www.indonesiamembaca.net)
+ * 
+ * Copyright (C) 2009 Yayasan Indonesia Membaca (http://www.indonesiamembaca.net)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ **[N]**/ ?>
+<?
+class CPustaka{
+	function OnStart(){
+		$op=$_REQUEST[op];
+		if ($op=="del"){
+			$sql = "DELETE FROM perpustakaan WHERE replid='$_REQUEST[id]'";
+			QueryDb($sql);
+		}
+	}
+	function OnFinish(){
+		?>
+		<script language='JavaScript'>
+			Tables('table', 1, 0);
+		</script>
+		<?
+    }
+    function Content(){
+		$sql = "SELECT * FROM perpustakaan ORDER BY nama";
+		$result = QueryDb($sql);
+		$num = @mysql_num_rows($result);
+		?>
+		<link href="../sty/style.css" rel="stylesheet" type="text/css">
+        <div class="funct">
+        	<a href="javascript:getfresh()"><img src="../img/ico/refresh.png" border="0">&nbsp;Refresh</a>&nbsp;&nbsp;
+            <a href="javascript:cetak()"><img src="../img/ico/print1.png" border="0">&nbsp;Cetak</a>&nbsp;&nbsp;
+            <? if(IsAdmin()){ ?>
+			<a href="javascript:tambah()"><img src="../img/ico/tambah.png" border="0">&nbsp;Tambah</a>&nbsp;        
+			<? } ?>
+		</div>
+        <table width="100%" border="1" cellspacing="0" cellpadding="0" class="tab" id="table">
+          <tr>
+            <td width="19" align="center" class="header">No</td>
+            <td width="148" height="30" align="center" class="header">Nama</td>
+			<td width="236" height="30" align="center" class="header">Jumlah Judul</td>
+            <td width="276" height="30" align="center" class="header">Jumlah Pustaka</td>
+            <td width="197" height="30" align="center" class="header">Keterangan</td>
+            <? if(IsAdmin()){ ?>
+			<td width="107" height="30" align="center" class="header">&nbsp;</td>
+			<? } ?>
+		  </tr>
+          <?
+		  if ($num>0){
+		  	  $cnt=1;	
+			  while ($row=@mysql_fetch_array($result)){
+					$num_judul = @mysql_num_rows(QueryDb("SELECT * FROM pustaka p, daftarpustaka d WHERE d.perpustakaan='$row[replid]' AND p.replid=d.pustaka GROUP BY d.pustaka"));
+					$num_pustaka = @mysql_fetch_row(QueryDb("SELECT COUNT(d.replid) FROM pustaka p, daftarpustaka d WHERE d.pustaka=p.replid AND d.perpustakaan='$row[replid]'"));
+			  ?>
+			  <tr>
+			    <td width="19" align="center"><?=$cnt?></td>
+				<td height="25">&nbsp;<?=$row[nama]?></td>
+				<td height="25" align="center">&nbsp;<?=$num_judul?>
+                <? if ($num_judul!=0){ ?>
+                    &nbsp;<img src="../img/ico/lihat.png" style="cursor:pointer" onclick="ViewByTitle('<?=$row[replid]?>')" />
+                <? } ?>                </td>
+				<td height="25" align="center">&nbsp;<?=(int)$num_pustaka[0]?></td>
+				<td height="25">&nbsp;<?=$row[keterangan]?></td>
+				<? if(IsAdmin()){ ?>
+				<td height="25" align="center" bgcolor="#FFFFFF"><a href="javascript:ubah('<?=$row[replid]?>')"><img src="../img/ico/ubah.png" width="16" height="16" border="0"></a>&nbsp;<a href="javascript:hapus('<?=$row[replid]?>')"><img src="../img/ico/hapus.png" border="0"></a></td>
+				<? } ?>
+			  </tr>
+			  <?
+			  $cnt++;
+			  }
+		  } else {
+		  ?>
+          <tr>
+            <td height="25" colspan="6" align="center" class="nodata">Tidak ada data</td>
+          </tr>
+		  <?
+		  }
+		  ?>	
+        </table>
+
+        <?
+	}
+}
+?>

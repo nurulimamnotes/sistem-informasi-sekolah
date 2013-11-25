@@ -1,0 +1,46 @@
+.bsTanggal {
+    font-family: Arial;
+    font-size: 9px;
+    font-style: italic;
+    font-weight: normal;
+    color: #a70e0e;
+}
+
+.bsJudul {
+    font-family: Georgia;
+    font-size: 16px;
+    font-weight: bold;
+    color: #023ec8;
+}
+
+.bsPenulis {
+    font-family: Arial;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: italic;
+    color: #000;
+}
+
+.bsAbstrak
+{
+    font-family: Georgia;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: normal;
+    color: #000;
+}
+
+.bsJudulIsi {
+    font-family: Georgia;
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+}
+
+.bsIsi
+{
+    font-family: Georgia;
+    font-size: 14px;
+    line-height: 24px;
+    color: #000;
+}
